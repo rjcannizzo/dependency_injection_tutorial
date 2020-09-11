@@ -14,17 +14,11 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 class App:
 
-    def read(self, filename):
-        temperatures_by_hour = {}
-        with open(Path(BASE_DIR).joinpath(filename)) as f:
-            reader = csv.reader(f)
-            next(reader)
-            for row in reader:
-                hour = datetime.strptime(row[0], '%d/%m/%Y %H:%M').isoformat()
-                temperature = float(row[2])
-                temperatures_by_hour[hour] = temperature
+    def __init__(self, data_source):
+        self.data_source = data_source
 
-        return temperatures_by_hour
+    def read(self, **kwargs):
+        return self.data_source.read(**kwargs)
 
     def draw(self, temperatures_by_hour):
         dates = []
@@ -40,7 +34,8 @@ class App:
 
 if __name__ == '__main__':
     import sys
-    filename = sys.argv[1]
-    app = App()
-    d = app.read(filename)
-    app.draw(d)
+    from urban_climate_csv import DataSource
+    file_name = sys.argv[1]
+    app = App(DataSource())
+    temperatures_by_hour = app.read(file_name=file_name)
+    app.draw(temperatures_by_hour)
