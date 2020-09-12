@@ -5,7 +5,7 @@ https://testdriven.io/blog/python-dependency-injection/
 """
 from datetime import datetime
 from pathlib import Path
-
+import json
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
@@ -28,13 +28,21 @@ class App:
 
         self.plot.draw(dates, temperatures)
 
+    @classmethod
+    def configure(cls, filename):
+        with open(filename) as file:
+            config = json.load(file)
+
+        data_source = __import__(config['data_source']['name']).DataSource()
+        plot = __import__(config['plot']['name']).Plot()
+        return cls(data_source, plot)
+
 
 if __name__ == '__main__':
     import sys
-    from open_weather_json import DataSource
-    from plotly_plot import Plot
 
-    file_name = sys.argv[1]
-    app = App(DataSource(), Plot())
+    config_file = sys.argv[1]
+    file_name = sys.argv[2]
+    app = App.configure(config_file)
     temperatures_by_hour = app.read(file_name=file_name)
     app.draw(temperatures_by_hour)
