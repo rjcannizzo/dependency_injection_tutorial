@@ -6,8 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pytest = "*"
-matplotlib = "*"
 plotly = "*"
 
 [requires]
