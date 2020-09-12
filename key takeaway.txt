@@ -1,0 +1,13 @@
+we import different modules into the main 'app' module
+each module has a clases named DataSource
+all DataSource classes have the same signature (**kwargs)
+pass a DataSource to the app and then have access to all of its methods
+example:
+
+	if __name__ == '__main__':
+		import sys
+		from urban_climate_csv import DataSource
+		file_name = sys.argv[1]
+		app = App(DataSource())
+		temps_by_hour = app.read(file_name=file_name)
+		app.draw(temps_by_hour)

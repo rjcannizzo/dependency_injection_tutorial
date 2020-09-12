@@ -3,7 +3,6 @@ Dependency injection tutorial
 https://testdriven.io/blog/python-dependency-injection/
 9-11-2020
 """
-import csv
 from datetime import datetime
 from pathlib import Path
 import matplotlib.dates
@@ -34,7 +33,8 @@ class App:
 
 if __name__ == '__main__':
     import sys
-    from urban_climate_csv import DataSource
+    from open_weather_json import DataSource
+
     file_name = sys.argv[1]
     app = App(DataSource())
     temperatures_by_hour = app.read(file_name=file_name)
